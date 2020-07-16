@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 4002:27017
+    command: mongod --logpath=/dev/null
+    restart: always
+
+  api:
+    build:
+      context: ./packages/api
+      dockerfile: ./Dockerfile.devenv
+    depends_on:
+      - mongodb
+    volumes:
+      - ./packages/api:/usr/src/app
+      # - type: bind
+      #   source: ./packages/api
+      #   target: /usr/src/app
+    expose:
+      - "4000"
+      - "9229"
+    ports:
+      - 4001:4000
+      - 9229:9229
+    #command: /bin/bash -c "/root/.deno/bin/deno run src/app.ts --allow-net"
+    command: /bin/bash -c "denon start"
