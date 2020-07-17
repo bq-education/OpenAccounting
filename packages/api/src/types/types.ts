@@ -1,5 +1,5 @@
 export interface IProject {
-  _id: { $oid: string };
+  id: { $oid: string };
   name: string;
   description: string;
 }
