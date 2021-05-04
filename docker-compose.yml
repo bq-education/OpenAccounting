@@ -1,6 +1,45 @@
 version: "3.8"
 
 services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./data/nginx:/usr/share/nginx/html
+    ports:
+      - 80:80
+  api:
+    image: node:12
+    volumes:
+      - type: bind
+        source: .
+        target: /usr/src
+      - ./data/nginx:/usr/share/nginx/html
+    environment:
+      - MONGO_URL=mongodb://localhost:27017/openaccounting
+      - API_PORT=8000
+      - NGINX_URL=http://localhost
+      - NGINX_LOCAL_PATH=/usr/share/nginx/html
+      - API_SALT_SECRET=sdf456456g789b456eny4j78nh45
+    depends_on:
+      - mongodb
+    ports:
+      - 8000:8000
+      - 9229:9229
+    command: bash -c "cd /usr/src/packages/api && yarn run dev-inspect"
+
+  front:
+    image: node:15
+    volumes:
+      - type: bind
+        source: .
+        target: /usr/src
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/graphql
+      - PORT=6005
+    ports:
+      - 6005:6005
+    command: bash -c "cd /usr/src/packages/front/ && yarn start"
+
   mongodb:
     image: mongo:latest
     environment:
@@ -9,26 +48,5 @@ services:
     volumes:
       - ./data/db:/data/db
     ports:
-      - 4002:27017
+      - 27017:27017
     command: mongod --logpath=/dev/null
-    restart: always
-
-  api:
-    build:
-      context: ./packages/api
-      dockerfile: ./Dockerfile.devenv
-    depends_on:
-      - mongodb
-    volumes:
-      - ./packages/api:/usr/src/app
-      # - type: bind
-      #   source: ./packages/api
-      #   target: /usr/src/app
-    expose:
-      - "4000"
-      - "9229"
-    ports:
-      - 4001:4000
-      - 9229:9229
-    #command: /bin/bash -c "/root/.deno/bin/deno run src/app.ts --allow-net"
-    command: /bin/bash -c "denon start"

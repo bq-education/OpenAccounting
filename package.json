@@ -1,0 +1,43 @@
+{
+  "name": "OpenAccounting",
+  "private": true,
+  "description": "OpenAccounting project",
+  "version": "1.0.0",
+  "repository": "https://github.com/bq-educacion/openaccounting",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "yarn --cwd packages/api dev",
+    "dev:front": "yarn --cwd packages/front start",
+    "lint": "eslint \"packages/*/**/src/**/*.{js,ts,tsx,jsx,json,scss}\" --fix",
+    "tsc:api": "cd packages/api && tsc --p ./tsconfig.json",
+    "tsc:front": "cd packages/front && tsc --p ./tsconfig.json",
+    "tsc": "yarn run tsc:front && yarn run tsc:api"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && yarn run tsc"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,jsx,scss}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.11.0",
+    "@typescript-eslint/parser": "^4.11.0",
+    "eslint": "^7.16.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "eslint-plugin-react": "^7.21.5",
+    "husky": "^4.3.6",
+    "lint-staged": "^10.5.3",
+    "prettier": "^2.2.1",
+    "react": "^17.0.1",
+    "typescript": "^4.1.3"
+  }
+}
