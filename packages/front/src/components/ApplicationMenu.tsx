@@ -1,9 +1,12 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import theme from "../style/theme/theme";
 
 const ApplicationMenu: FC<{ items: string[] }> = ({ items }) => {
   const [selected, setSelected] = useState<string>(items[0]);
+  useEffect(() => {
+    setSelected(items[0]);
+  }, [items]);
   return (
     <div>
       {items.map((value, index) => (

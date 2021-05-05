@@ -5,10 +5,10 @@ import theme from "../style/theme/theme";
 const Applications: FC<{
   list: string[];
   setApplication: (app: string) => void;
-}> = ({ list }) => {
+}> = ({ list, setApplication }) => {
   return (
     <div>
-      <Select>
+      <Select onChange={(e) => setApplication(e.target.value)}>
         {list.map((application, index) => (
           <option key={index}>{application}</option>
         ))}

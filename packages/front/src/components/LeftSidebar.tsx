@@ -11,7 +11,7 @@ const applications = [
     menu: ["Ingresos", "Gastos", "Personal Externo"],
   },
   {
-    name: "Ingresos",
+    name: "Facturación",
     menu: ["Fact. Emitidas", "Fact. Recibidas", "Clientes", "Productos"],
   },
 ];
