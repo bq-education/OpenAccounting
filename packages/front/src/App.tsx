@@ -1,11 +1,10 @@
 import React from "react";
-import logo from "./logo.svg";
-import DataComponent from "./components/DataComponent";
+import MainComponent from "./components/MainComponent";
 
 function App() {
   return (
     <div>
-      <DataComponent />
+      <MainComponent />
     </div>
   );
 }
