@@ -4,6 +4,7 @@ export type Income = {
   project: string;
   area: string;
   jira: string;
+  factura: string;
   due: string;
   paid: boolean;
   by: string;

@@ -1,22 +1,6 @@
 import styled from "@emotion/styled";
 import theme from "../theme/theme";
 
-export const TitlesHeader = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-around;
-  align-items: stretch;
-  border-bottom: 1px solid ${theme.colors["color-black-100"]};
-  margin-bottom: 10px;
-`;
-
-export const Title = styled.div<{ width: string }>`
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: ${(props) => props.width};
-  font-weight: bold;
-`;
-
 export const WhiteButton = styled.button<{ margin?: string }>`
   background-color: white;
   color: ${theme.colors["color-black-100"]};
@@ -79,7 +63,7 @@ export const Input = styled.input<{ width?: string; height?: string }>`
 
 export const Cell = styled.input<{ width?: string; height?: string }>`
   background-color: white;
-  margin: 0 10px 0 10px;
+  margin: 0;
   padding: 0 5px 0 5px;
   border: 0px;
   height: 25px;
@@ -98,9 +82,11 @@ export const SelectInput = styled.select<{
   height?: string;
   padding?: string;
   margin?: string;
+  maxwidth?: string;
 }>`
   background-color: white;
   width: ${(props) => props.width || "100%"};
+  max-width: ${(props) => props.maxwidth || "100%"};
   height: ${(props) => props.height || "25px"};
   padding: ${(props) => props.padding || "0"};
   margin: ${(props) => props.margin || "0"};
@@ -130,6 +116,9 @@ export const Row = styled.div`
 export const Column = styled.div<{ width: string }>`
   width: ${(props) => props.width};
   padding: 0 10px 0 10px;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
+  box-sizing: border-box;
 `;
 
 export const HeaderRow = styled.div`

@@ -1,15 +1,8 @@
 import React, { FC, useState } from "react";
 import { projects } from "../config";
-import {
-  Table,
-  Row,
-  Column,
-  HeaderRow,
-  Cell,
-} from "../style/components/styledcomponents";
+import { Table, Column, HeaderRow } from "../style/components/styledcomponents";
 import { Income } from "../types";
 import RowIncomeComponent from "./RowIncomeComponent";
-import SelectComponent from "./SelectComponent";
 
 const incomeExample: Income[] = [
   {
@@ -18,8 +11,9 @@ const incomeExample: Income[] = [
     project: "RetoTech",
     area: "Coordinacion",
     jira: "https://jira.bq.com/asddf/aasdd",
+    factura: "12334",
     due: "2020-12-03",
-    paid: false,
+    paid: true,
     by: "Alberto Valero",
     lastmodified: "23/33/2323",
   },
@@ -29,6 +23,7 @@ const incomeExample: Income[] = [
     project: "RetoTech",
     area: "Coordinacion",
     jira: "https://jira.bq.com/asddf/aasdd",
+    factura: "12334",
     due: "2020-12-03",
     paid: false,
     by: "Alberto Valero",
@@ -40,6 +35,7 @@ const incomeExample: Income[] = [
     project: "RetoTech",
     area: "Coordinacion",
     jira: "https://jira.bq.com/asddf/aasddzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+    factura: "12334",
     due: "2020-12-03",
     paid: false,
     by: "Alberto Valero",
@@ -52,31 +48,33 @@ const MonthlyIncomeComponent: FC<{ month: number; year: number }> = ({
   year,
 }) => {
   const [incomeTable, setIncomeTable] = useState<Income[]>(incomeExample);
-  const updateCell = (id: string, key: string, value: string) => {
-    const row: Income | undefined = incomeTable.find((r) => r.id === id);
-    if (!row) throw new Error("Row not found. This should not happen");
-    if (row && Object.keys(row).includes(key)) {
-      debugger;
-      if (key === "amount") {
-        if (!isNaN(Number(value))) row.amount = Number(value);
-      } else if (key === "paid") row.paid = Boolean(value);
-      else (row as any)[key] = value;
+
+  const removeRow = (id: string): void => {
+    const toRemove = incomeTable.find((row) => row.id === id);
+    if (toRemove) {
+      const index = incomeTable.indexOf(toRemove);
+      incomeTable.splice(index, 1);
+      setIncomeTable([...incomeTable]);
     }
-    setIncomeTable([...incomeTable]);
+  };
+
+  const addRow = (row: Income): void => {
+    setIncomeTable([...incomeTable, row]);
   };
 
   return (
     <React.Fragment>
       <Table>
         <HeaderRow>
-          <Column width="150px">Cantidad (€)</Column>
+          <Column width="120px">Cantidad (€)</Column>
           <Column width="150px">Proyecto</Column>
           <Column width="150px">Área</Column>
-          <Column width="250px">Issue JIRA</Column>
+          <Column width="150px">Issue JIRA</Column>
+          <Column width="100px">Nº Factura</Column>
           <Column width="165px">Fecha de pago</Column>
-          <Column width="150px">Cobrado</Column>
+          <Column width="100px">Cobrado</Column>
           <Column width="150px">Introducido por</Column>
-          <Column width="150px">Última modificación</Column>
+          <Column width="200px">Última modificación</Column>
           <Column width="150px">&nbsp;</Column>
         </HeaderRow>
         {incomeTable.map((row) => (
@@ -84,8 +82,13 @@ const MonthlyIncomeComponent: FC<{ month: number; year: number }> = ({
             key={row.id}
             row={row}
             projects={projects}
+            removeHandler={() => removeRow(row.id)}
           ></RowIncomeComponent>
         ))}
+        <RowIncomeComponent
+          projects={projects}
+          addHandler={(row: Income) => addRow(row)}
+        ></RowIncomeComponent>
       </Table>
     </React.Fragment>
   );

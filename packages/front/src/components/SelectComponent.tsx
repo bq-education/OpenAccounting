@@ -5,11 +5,15 @@ const SelectComponent: FC<{
   options: string[];
   onChange: (value: string) => void;
   width: string;
-}> = ({ options, onChange, width }) => {
+  maxwidth: string;
+  selected: string;
+}> = ({ options, onChange, width, maxwidth, selected }) => {
   return (
     <React.Fragment>
       <SelectInput
+        defaultValue={selected}
         width={width}
+        max-width={maxwidth}
         padding="0"
         onChange={(e) => onChange(e.target.value)}
       >

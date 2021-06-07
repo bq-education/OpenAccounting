@@ -1,71 +1,152 @@
-import React, { FC } from "react";
-import { Cell, Column, Row } from "../style/components/styledcomponents";
+import React, { FC, useState } from "react";
+import {
+  Cell,
+  Column,
+  Row,
+  WhiteButton,
+} from "../style/components/styledcomponents";
 import { Income, Project } from "../types";
 import SelectComponent from "./SelectComponent";
 
-const RowIncomeComponent: FC<{ row: Income; projects: Project[] }> = ({
-  row,
-  projects,
-}) => {
-  const updateCell = (row: Income, key: string, value: string) => {
-    if (row && Object.keys(row).includes(key)) {
-      debugger;
-      if (key === "amount") {
-        if (!isNaN(Number(value))) row.amount = Number(value);
-      } else if (key === "paid") row.paid = Boolean(value);
-      else (row as any)[key] = value;
+const RowIncomeComponent: FC<{
+  row?: Income;
+  projects: Project[];
+  removeHandler?: () => void;
+  addHandler?: (row: Income) => void;
+}> = ({ row, projects, removeHandler, addHandler }) => {
+  const emptyRow: Income = {
+    id: "",
+    amount: 0,
+    project: projects[0].name,
+    area: "",
+    jira: "",
+    factura: "",
+    due: "",
+    paid: false,
+    by: "",
+    lastmodified: "",
+  };
+
+  const [values, setValues] = useState<Income>(
+    row || {
+      id: "",
+      amount: 0,
+      project: projects[0].name,
+      area: "",
+      jira: "",
+      factura: "",
+      due: "",
+      paid: false,
+      by: "",
+      lastmodified: "",
     }
-    // setIncomeTable([...incomeTable]);
+  );
+
+  const updateCell = (values: Income, key: string, value: string) => {
+    if (values && Object.keys(values).includes(key)) {
+      if (key === "amount") {
+        if (!isNaN(Number(value))) values.amount = Number(value);
+      } else if (key === "paid") values.paid = "Si" === value;
+      else (values as any)[key] = value;
+    }
+    setValues({ ...values });
   };
 
   return (
     <Row>
       <Cell
-        width="150px"
+        width="120px"
         type="number"
         step="any"
         min="0"
-        value={row.amount}
-        onChange={(e) => updateCell(row, "amount", e.target.value)}
+        value={values?.amount || ""}
+        onChange={(e) => updateCell(values!, "amount", e.target.value)}
       ></Cell>
-      <SelectComponent
-        options={projects.map((p) => p.name)}
-        onChange={(value: string) => {
-          console.log(value);
-        }}
-        width="150px"
-      />
+      <Column width="150px">
+        <SelectComponent
+          selected={values?.project || projects[0].name}
+          options={projects.map((p) => p.name)}
+          onChange={(value: string) => {
+            updateCell(values!, "project", value);
+            updateCell(
+              values!,
+              "area",
+              projects.find((p) => values?.project === value)?.areas[0] || ""
+            );
+          }}
+          width="fit-content"
+          maxwidth="150px"
+        />
+      </Column>
+      <Column width="150px">
+        <SelectComponent
+          width="150px"
+          selected={values?.area || projects[0].areas[0]}
+          options={
+            projects
+              .find((p) => values?.project === p.name)
+              ?.areas.map((a) => a) || []
+          }
+          onChange={(value: string) => {
+            updateCell(values!, "area", value);
+          }}
+          maxwidth="150px"
+        />
+      </Column>
       <Cell
         width="150px"
-        value={row.area}
-        onChange={(e) => updateCell(row, "area", e.target.value)}
-      ></Cell>
-      <Cell
-        width="250px"
         type="url"
-        value={row.jira}
-        onChange={(e) => updateCell(row, "jira", e.target.value)}
+        value={values.jira}
+        onChange={(e) => updateCell(values!, "jira", e.target.value)}
+      ></Cell>
+      <Cell
+        width="100px"
+        value={values.factura}
+        onChange={(e) => updateCell(values!, "factura", e.target.value)}
       ></Cell>
       <Cell
         width="165px"
         type="date"
-        value={row.due}
-        onChange={(e) => updateCell(row, "due", e.target.value)}
+        value={values.due}
+        onChange={(e) => updateCell(values!, "due", e.target.value)}
       ></Cell>
+      <Column width="100px">
+        <SelectComponent
+          selected={values.paid ? "Si" : "No"}
+          options={["Si", "No"]}
+          onChange={(value: string) => {
+            updateCell(values!, "paid", value === "Si" ? "true" : "false");
+          }}
+          width="fit-content"
+          maxwidth="150px"
+        />
+      </Column>
+      <Cell width="150px" value={values.by} readOnly={true}></Cell>
       <Cell
-        width="150px"
-        value={row.paid ? "Si" : "No"}
-        onChange={(e) =>
-          updateCell(row, "paid", e.target.value === "Si" ? "true" : "false")
-        }
+        width="200px"
+        type="date"
+        value={values.lastmodified}
+        onKeyDown={() => false}
+        readOnly={true}
       ></Cell>
-      <Cell
-        width="150px"
-        value={row.by}
-        onChange={(e) => updateCell(row, "by", e.target.value)}
-      ></Cell>
-      <Cell width="150px" value={row.lastmodified}></Cell>
-      <Column width="150px"> Borrar </Column>
+      {removeHandler && (
+        <Column width="150px" onClick={(e) => removeHandler()}>
+          Borrar
+        </Column>
+      )}
+      {addHandler && (
+        <Column width="150px">
+          <WhiteButton
+            margin="0"
+            onClick={(e) => {
+              addHandler(values);
+              setValues(emptyRow);
+            }}
+          >
+            Añadir
+          </WhiteButton>
+        </Column>
+      )}
     </Row>
   );
 };
