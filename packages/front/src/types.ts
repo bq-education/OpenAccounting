@@ -4,11 +4,13 @@ export type Income = {
   project: string;
   area: string;
   jira: string;
-  factura: string;
+  invoice: string;
   due: string;
   paid: boolean;
   by: string;
   lastmodified: string;
+  description: string;
+  confirmed: boolean;
 };
 
 export type Project = {

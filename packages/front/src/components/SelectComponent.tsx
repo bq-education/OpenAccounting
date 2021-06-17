@@ -3,11 +3,12 @@ import { SelectInput } from "../style/components/styledcomponents";
 
 const SelectComponent: FC<{
   options: string[];
-  onChange: (value: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onBlur?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   width: string;
   maxwidth: string;
   selected: string;
-}> = ({ options, onChange, width, maxwidth, selected }) => {
+}> = ({ options, onChange, onBlur, width, maxwidth, selected }) => {
   return (
     <React.Fragment>
       <SelectInput
@@ -15,7 +16,8 @@ const SelectComponent: FC<{
         width={width}
         max-width={maxwidth}
         padding="0"
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(e)}
+        onBlur={(e) => onBlur?.(e)}
       >
         {options.map((op) => (
           <option key={op}>{op}</option>

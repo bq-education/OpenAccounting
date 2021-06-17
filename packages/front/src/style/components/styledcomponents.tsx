@@ -61,7 +61,11 @@ export const Input = styled.input<{ width?: string; height?: string }>`
   height: ${(props) => props.height || "25px"};
 `;
 
-export const Cell = styled.input<{ width?: string; height?: string }>`
+export const Cell = styled.input<{
+  width?: string;
+  height?: string;
+  inheritCursor?: boolean;
+}>`
   background-color: white;
   margin: 0;
   padding: 0 5px 0 5px;
@@ -75,6 +79,7 @@ export const Cell = styled.input<{ width?: string; height?: string }>`
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
   -moz-box-sizing: border-box; /* Firefox, other Gecko */
   box-sizing: border-box;
+  cursor: ${(props) => (props.inheritCursor ? "inherit" : "auto")};
 `;
 
 export const SelectInput = styled.select<{
@@ -113,12 +118,15 @@ export const Row = styled.div`
   flex-wrap: nowrap;
 `;
 
-export const Column = styled.div<{ width: string }>`
+export const Column = styled.div<{ width: string; justifycontent?: string }>`
   width: ${(props) => props.width};
   padding: 0 10px 0 10px;
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
   -moz-box-sizing: border-box; /* Firefox, other Gecko */
   box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: ${(props) => props.justifycontent || "flex-start"}; ;
 `;
 
 export const HeaderRow = styled.div`
@@ -130,4 +138,22 @@ export const HeaderRow = styled.div`
   //font-weight: bold;
   background-color: ${theme.colors["color-black-80"]};
   color: white;
+`;
+
+export const Action = styled.span`
+  img,
+  svg {
+    fill: ${theme.colors["color-black-80"]};
+    margin: auto;
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 20px;
+    min-height: 20px;
+    min-width: 20px;
+    width: 20px;
+    cursor: pointer;
+  }
+  svg:hover {
+    fill: ${theme.colors["color-red-80"]};
+  }
 `;

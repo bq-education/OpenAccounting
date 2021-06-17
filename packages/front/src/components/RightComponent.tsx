@@ -15,6 +15,7 @@ const RightComponent: FC<{
   return (
     <Div>
       <Top>
+        <H1>{item}</H1>
         <MonthYearMenu
           month={month}
           setMonth={setMonth}
@@ -35,6 +36,14 @@ const Top = styled.div`
   padding: 20px 70px 20px 30px;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const H1 = styled.h1`
+  padding: 0;
+  margin: 0;
 `;
 
 const Main = styled.div`
