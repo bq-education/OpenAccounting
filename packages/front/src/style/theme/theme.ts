@@ -1,5 +1,3 @@
-import { DefaultDeserializer } from "node:v8";
-
 const theme = {
   colors: {
     "color-black-30": "#d7d8da",

@@ -61,7 +61,7 @@ export const Input = styled.input<{ width?: string; height?: string }>`
   height: ${(props) => props.height || "25px"};
 `;
 
-export const Cell = styled.input<{
+export const Cellx = styled.input<{
   width?: string;
   height?: string;
   inheritCursor?: boolean;

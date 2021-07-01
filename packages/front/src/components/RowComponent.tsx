@@ -6,19 +6,21 @@ import {
   Row,
   WhiteButton,
 } from "../style/components/styledcomponents";
-import { Income, Project } from "../types";
+import { IColumn, Income, Project } from "../types";
 import SelectComponent from "./SelectComponent";
 import { ReactComponent as TrashLogo } from "../static/icons/trash.svg";
 import { ReactComponent as Info } from "../static/icons/info.svg";
 import ControlLink from "./ControlLink";
+import Cell from "./CellComponent";
 
-const RowIncomeComponent: FC<{
+const RowComponent: FC<{
   row?: Income;
   projects: Project[];
   removeHandler?: () => void;
   addHandler?: (row: Income) => void;
   updateHandler?: (row: Income) => void;
-}> = ({ row, projects, removeHandler, addHandler, updateHandler }) => {
+  columns: IColumn[];
+}> = ({ row, projects, columns, removeHandler, addHandler, updateHandler }) => {
   const emptyRow: Income = {
     id: "",
     amount: 0,
@@ -52,9 +54,25 @@ const RowIncomeComponent: FC<{
     if (updateHandler) updateHandler(values);
   };
 
+  const onChangeSelect = () => {};
+
   return (
     <Row>
-      <Cellx
+      {columns.map((cell: IColumn) => (
+        <Cell
+          type={cell.type}
+          attributes={cell.attributes}
+          value={values[cell.key] as string | number}
+          onChange={(
+            e:
+              | React.ChangeEvent<HTMLInputElement>
+              | React.ChangeEvent<HTMLSelectElement>
+          ) => updateCell(values!, cell.key, e.target.value)}
+          onBlur={(e) => updateRow(values)}
+        />
+      ))}
+
+      {/* <Cellx
         width="120px"
         type="number"
         step="any"
@@ -155,7 +173,7 @@ const RowIncomeComponent: FC<{
           width="fit-content"
           maxwidth="150px"
         />
-      </Column>
+      </Column> */}
       {removeHandler && (
         <Column width="100px" justifycontent="center">
           <Action onClick={(e) => removeHandler()}>
@@ -185,4 +203,4 @@ const RowIncomeComponent: FC<{
   );
 };
 
-export default RowIncomeComponent;
+export default RowComponent;

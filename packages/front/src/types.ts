@@ -1,4 +1,4 @@
-export type Income = {
+export type Income = Record<string, string | number | boolean> & {
   id: string;
   amount: number;
   project: string;
@@ -17,4 +17,13 @@ export type Project = {
   name: string;
   areas: string[];
   active: boolean;
+};
+
+export type IColumn = {
+  name: string;
+  key: string;
+  attributes: { [key: string]: string };
+  options?: string[];
+  shortable: boolean;
+  type?: string;
 };

@@ -1,9 +1,9 @@
 import React, { FC, useState } from "react";
 import { projects } from "../config";
 import { Table, Column, HeaderRow } from "../style/components/styledcomponents";
-import { Income } from "../types";
-import RowIncomeComponent from "./RowIncomeComponent";
+import { IColumn, Income } from "../types";
 import arraySort from "array-sort";
+import RowComponent from "./RowComponent";
 
 const incomeExample: Income[] = [
   {
@@ -50,16 +50,93 @@ const incomeExample: Income[] = [
   },
 ];
 
-const columnWidths = [
-  "120px",
-  "150px",
-  "150px",
-  "100px",
-  "165px",
-  "100px",
-  "300px",
-  "100px",
-  "100px",
+const columns: IColumn[] = [
+  {
+    name: "Cantidad",
+    key: "amount",
+    attributes: {
+      type: "number",
+      width: "120px",
+      step: "any",
+    },
+    shortable: false,
+    type: "number",
+  },
+  {
+    name: "Proyecto",
+    key: "project",
+    attributes: {
+      width: "150px",
+      selected: projects[0].name,
+    },
+    options: projects.map((p) => p.name),
+
+    shortable: true,
+    type: "select",
+  },
+  {
+    name: "Área",
+    key: "area",
+    attributes: {
+      width: "150px",
+      selected: projects[0].areas[0],
+    },
+    options: projects.map((p) => p.name),
+    shortable: false,
+    type: "select",
+  },
+  {
+    name: "JIRA",
+    key: "jira",
+    attributes: {
+      width: "150px",
+      type: "url",
+    },
+    shortable: true,
+    type: "url",
+  },
+  {
+    name: "Nº Factura",
+    key: "invoice",
+    attributes: {
+      width: "100px",
+    },
+    shortable: true,
+    type: "string",
+  },
+  {
+    name: "Vencimiento",
+    key: "due",
+    attributes: { width: "165px", type: "date" },
+    shortable: true,
+    type: "date",
+  },
+  {
+    name: "Cobrado",
+    key: "paid",
+    attributes: { width: "100px" },
+    shortable: true,
+    type: "boolean",
+  },
+  {
+    name: "Descripción",
+    key: "description",
+    attributes: { width: "300px" },
+    shortable: false,
+  },
+  {
+    name: "Confirmado",
+    key: "confirmed",
+    attributes: { width: "100px" },
+    type: "boolean",
+    shortable: true,
+  },
+  {
+    name: "",
+    key: "actions",
+    attributes: { width: "100px" },
+    shortable: false,
+  },
 ];
 
 const MonthlyIncomeComponent: FC<{ month: number; year: number }> = ({
@@ -95,86 +172,33 @@ const MonthlyIncomeComponent: FC<{ month: number; year: number }> = ({
     <React.Fragment>
       <Table>
         <HeaderRow>
-          <Column width="120px">Cantidad (€)</Column>
-          <Column
-            width="150px"
-            onClick={() => {
-              setIncomeTable([...sortBy(incomeTable, "project")]);
-            }}
-          >
-            Proyecto
-          </Column>
-          <Column
-            width="150px"
-            onClick={() => {
-              setIncomeTable([...sortBy(incomeTable, "area")]);
-            }}
-          >
-            Área
-          </Column>
-          <Column
-            width="150px"
-            onClick={() => {
-              setIncomeTable([...sortBy(incomeTable, "jira")]);
-            }}
-          >
-            Issue JIRA
-          </Column>
-          <Column
-            width="100px"
-            onClick={() => {
-              setIncomeTable([...sortBy(incomeTable, "invoice")]);
-            }}
-          >
-            Nº Factura
-          </Column>
-          <Column
-            width="165px"
-            onClick={() => {
-              setIncomeTable([...sortBy(incomeTable, "due")]);
-            }}
-          >
-            Fecha de pago
-          </Column>
-          <Column
-            width="100px"
-            onClick={() => {
-              setIncomeTable([...sortBy(incomeTable, "paid")]);
-            }}
-          >
-            Cobrado
-          </Column>
-          <Column
-            width="300px"
-            onClick={() => {
-              setIncomeTable([...sortBy(incomeTable, "description")]);
-            }}
-          >
-            Descripción
-          </Column>
-          <Column
-            width="100px"
-            onClick={() => {
-              setIncomeTable([...sortBy(incomeTable, "confirmed")]);
-            }}
-          >
-            Confirmado
-          </Column>
-          <Column width="100px">&nbsp;</Column>
+          {columns.map((col) => (
+            <Column
+              width={col.attributes.width}
+              onClick={() => {
+                col.shortable &&
+                  setIncomeTable([...sortBy(incomeTable, col.key)]);
+              }}
+            >
+              {col.name}
+            </Column>
+          ))}
         </HeaderRow>
         {incomeTable.map((row) => (
-          <RowIncomeComponent
+          <RowComponent
+            columns={columns}
             key={row.id}
             row={row}
             projects={projects}
             removeHandler={() => deleteRow(row.id)}
             updateHandler={(newrow: Income) => updateRow(row, newrow)}
-          ></RowIncomeComponent>
+          ></RowComponent>
         ))}
-        <RowIncomeComponent
+        <RowComponent
+          columns={columns}
           projects={projects}
           addHandler={(row: Income) => addRow(row)}
-        ></RowIncomeComponent>
+        ></RowComponent>
       </Table>
     </React.Fragment>
   );
