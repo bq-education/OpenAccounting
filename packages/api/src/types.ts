@@ -1,3 +1,12 @@
+export type User = {
+  name: string;
+  surname: string;
+  email: string;
+  token: string;
+  role: string;
+  password: string;
+};
+
 export type Income = Record<string, string | number | boolean> & {
   id: string;
   amount: number;
@@ -43,28 +52,4 @@ export type External = Record<string, string | number | boolean> & {
   createdAt: string;
   description: string;
   confirmed: boolean;
-};
-
-export type Project = {
-  name: string;
-  areas: string[];
-  active: boolean;
-};
-
-export enum InputType {
-  BOOLEAN,
-  STRING,
-  NUMBER,
-  SELECT,
-  URL,
-  DATE,
-}
-
-export type IColumn = {
-  name: string;
-  key: string;
-  attributes: { [key: string]: string };
-  options?: string[];
-  shortable: boolean;
-  type?: InputType;
 };

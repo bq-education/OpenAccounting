@@ -29,7 +29,8 @@ const RowIncomeComponent: FC<{
     due: "",
     paid: false,
     by: "",
-    lastmodified: "",
+    updatedAt: "",
+    createdAt: "",
     description: "",
     confirmed: false,
   };
@@ -162,7 +163,7 @@ const RowIncomeComponent: FC<{
             <TrashLogo />
           </Action>
           <Action
-            data-tip={`Añadido por: ${values.by}.<br> Última modificación: ${values.lastmodified}`}
+            data-tip={`Añadido por: ${values.by}.<br> Última modificación: ${values.updatedAt}`}
           >
             <Info />
           </Action>

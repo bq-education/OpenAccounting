@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import styled from "@emotion/styled";
 import { ReactComponent as Logo } from "../logo.svg";
 import theme from "../style/theme/theme";
@@ -29,7 +29,7 @@ const LeftSidebar: FC<{
       {applications.map((application) => (
         <React.Fragment>
           <Spacer />
-          <Application>{application.name}</Application>
+          <App>{application.name}</App>
           {application.menu.map((item) => (
             <Item
               selected={
@@ -72,7 +72,7 @@ const Spacer = styled.div`
   background-color: ${theme.colors["color-black-80"]};
 `;
 
-const Application = styled.div`
+const App = styled.div`
   padding: 0px;
   width: 130px;
   height: 20px;
