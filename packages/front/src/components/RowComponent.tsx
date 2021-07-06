@@ -5,7 +5,7 @@ import {
   Row,
   WhiteButton,
 } from "../style/components/styledcomponents";
-import { IColumn, Income, Project } from "../types";
+import { Expense, IColumn, Income, Project } from "../types";
 import { ReactComponent as TrashLogo } from "../static/icons/trash.svg";
 import { ReactComponent as Info } from "../static/icons/info.svg";
 import Cell from "./CellComponent";
@@ -13,10 +13,10 @@ import Cell from "./CellComponent";
 const RowComponent: FC<{
   row?: any;
   projects: Project[];
-  emptyRow?: Income;
+  emptyRow?: Income | Expense;
   removeHandler?: () => void;
-  addHandler?: (row: Income) => void;
-  updateHandler?: (row: Income) => void;
+  addHandler?: (row: Income | Expense) => void;
+  updateHandler?: (row: Income | Expense) => void;
   columns: IColumn[];
 }> = ({
   row,
@@ -32,9 +32,11 @@ const RowComponent: FC<{
     updateHandler && console.log(`Run Upgrade Mutation for ${row.id}`);
   };
 
-  const [values, setValues] = useState<Income>(row || { ...emptyRow });
+  const [values, setValues] = useState<Income | Expense>(
+    row || { ...emptyRow }
+  );
 
-  const updateCell = (values: Income, key: string, value: string) => {
+  const updateCell = (values: Income | Expense, key: string, value: string) => {
     if (values && Object.keys(values).includes(key)) {
       if (key === "amount") {
         if (!isNaN(Number(value))) values.amount = Number(value);

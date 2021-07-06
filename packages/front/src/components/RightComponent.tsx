@@ -1,8 +1,9 @@
 import React, { FC } from "react";
 import styled from "@emotion/styled";
 import MonthYearMenu from "./MonthYearMenu";
-import theme from "../style/theme/theme";
 import MonthlyIncomeComponent from "./MonthlyIncomeComponent";
+import MonthlyExpenseComponent from "./MonthlyExpenseComponent";
+import MonthlyExternalComponent from "./MonthlyExternalComponent";
 
 const RightComponent: FC<{
   setMonth: (month: number) => void;
@@ -26,6 +27,12 @@ const RightComponent: FC<{
       <Main>
         {app === "Contabilidad" && item === "Ingresos" && (
           <MonthlyIncomeComponent month={month} year={year} />
+        )}
+        {app === "Contabilidad" && item === "Gastos" && (
+          <MonthlyExpenseComponent month={month} year={year} />
+        )}
+        {app === "Contabilidad" && item === "Personal Externo" && (
+          <MonthlyExternalComponent month={month} year={year} />
         )}
       </Main>
     </Div>

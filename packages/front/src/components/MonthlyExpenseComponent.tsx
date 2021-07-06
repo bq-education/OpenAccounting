@@ -1,18 +1,17 @@
 import React, { FC, useState } from "react";
-import { projects, incomeColumns as columns } from "../config";
+import { projects, expenseColumns as columns } from "../config";
 import { Table, Column, HeaderRow } from "../style/components/styledcomponents";
+import { Expense } from "../types";
 import arraySort from "array-sort";
 import RowComponent from "./RowComponent";
-import { Income } from "../types";
 
-const incomeExample: Income[] = [
+const expenseExample: Expense[] = [
   {
     id: "1",
     amount: 500,
     project: "RetoTech",
     area: "Coordinacion",
     jira: "https://jira.bq.com/asddf/aasdd",
-    invoice: "12334",
     due: "2020-12-03",
     paid: true,
     by: "Alberto Valero",
@@ -26,7 +25,6 @@ const incomeExample: Income[] = [
     project: "RetoTech",
     area: "Coordinacion",
     jira: "https://jira.bq.com/asddf/aasdd",
-    invoice: "12334",
     due: "2020-12-03",
     paid: false,
     by: "Alberto Valero",
@@ -40,7 +38,6 @@ const incomeExample: Income[] = [
     project: "RetoTech",
     area: "Coordinacion",
     jira: "https://jira.bq.com/asddf/aasddzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
-    invoice: "12334",
     due: "2020-12-03",
     paid: false,
     by: "Alberto Valero",
@@ -50,13 +47,12 @@ const incomeExample: Income[] = [
   },
 ];
 
-const emptyRow: Income = {
+const emptyRow: Expense = {
   id: "",
   amount: 0,
   project: projects[0].name,
   area: "",
   jira: "",
-  invoice: "",
   due: "",
   paid: false,
   by: "",
@@ -65,31 +61,31 @@ const emptyRow: Income = {
   confirmed: false,
 };
 
-const MonthlyIncomeComponent: FC<{ month: number; year: number }> = ({
+const MonthlyExpenseComponent: FC<{ month: number; year: number }> = ({
   month,
   year,
 }) => {
-  const [incomeTable, setIncomeTable] = useState<Income[]>(incomeExample);
+  const [expenseTable, setExpenseTable] = useState<Expense[]>(expenseExample);
 
   const deleteRow = (id: string): void => {
-    const toRemove = incomeTable.find((row) => row.id === id);
+    const toRemove = expenseTable.find((row) => row.id === id);
     if (toRemove) {
-      const index = incomeTable.indexOf(toRemove);
-      incomeTable.splice(index, 1);
-      setIncomeTable([...incomeTable]);
+      const index = expenseTable.indexOf(toRemove);
+      expenseTable.splice(index, 1);
+      setExpenseTable([...expenseTable]);
     }
   };
 
-  const addRow = (row: Income): void => {
-    setIncomeTable([...incomeTable, row]);
+  const addRow = (row: Expense): void => {
+    setExpenseTable([...expenseTable, row]);
   };
 
-  const updateRow = (row: Income, newrow: Income): void => {
-    const index = incomeTable.indexOf(row);
-    incomeTable[index] = newrow;
+  const updateRow = (row: Expense, newrow: Expense): void => {
+    const index = expenseTable.indexOf(row);
+    expenseTable[index] = newrow;
   };
 
-  const sortBy = (rows: Income[], key: string): Income[] => {
+  const sortBy = (rows: Expense[], key: string): Expense[] => {
     arraySort(rows, key);
     return rows;
   };
@@ -103,27 +99,27 @@ const MonthlyIncomeComponent: FC<{ month: number; year: number }> = ({
               width={col.attributes.width}
               onClick={() => {
                 col.shortable &&
-                  setIncomeTable([...sortBy(incomeTable, col.key)]);
+                  setExpenseTable([...sortBy(expenseTable, col.key)]);
               }}
             >
               {col.name}
             </Column>
           ))}
         </HeaderRow>
-        {incomeTable.map((row) => (
+        {expenseTable.map((row) => (
           <RowComponent
             columns={columns}
             key={row.id}
             row={row}
             projects={projects}
             removeHandler={() => deleteRow(row.id)}
-            updateHandler={(newrow) => updateRow(row, newrow as Income)}
+            updateHandler={(newrow) => updateRow(row, newrow as Expense)}
           ></RowComponent>
         ))}
         <RowComponent
           columns={columns}
           projects={projects}
-          addHandler={(row) => addRow(row as Income)}
+          addHandler={(row) => addRow(row as Expense)}
           emptyRow={emptyRow}
         ></RowComponent>
       </Table>
@@ -131,4 +127,4 @@ const MonthlyIncomeComponent: FC<{ month: number; year: number }> = ({
   );
 };
 
-export default MonthlyIncomeComponent;
+export default MonthlyExpenseComponent;
