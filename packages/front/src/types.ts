@@ -19,11 +19,20 @@ export type Project = {
   active: boolean;
 };
 
+export enum InputType {
+  BOOLEAN,
+  STRING,
+  NUMBER,
+  SELECT,
+  URL,
+  DATE,
+}
+
 export type IColumn = {
   name: string;
   key: string;
   attributes: { [key: string]: string };
   options?: string[];
   shortable: boolean;
-  type?: string;
+  type?: InputType;
 };

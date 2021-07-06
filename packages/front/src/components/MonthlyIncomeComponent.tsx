@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { projects } from "../config";
 import { Table, Column, HeaderRow } from "../style/components/styledcomponents";
-import { IColumn, Income } from "../types";
+import { IColumn, Income, InputType } from "../types";
 import arraySort from "array-sort";
 import RowComponent from "./RowComponent";
 
@@ -60,7 +60,7 @@ const columns: IColumn[] = [
       step: "any",
     },
     shortable: false,
-    type: "number",
+    type: InputType.NUMBER,
   },
   {
     name: "Proyecto",
@@ -72,7 +72,7 @@ const columns: IColumn[] = [
     options: projects.map((p) => p.name),
 
     shortable: true,
-    type: "select",
+    type: InputType.SELECT,
   },
   {
     name: "Área",
@@ -83,7 +83,7 @@ const columns: IColumn[] = [
     },
     options: projects.map((p) => p.name),
     shortable: false,
-    type: "select",
+    type: InputType.SELECT,
   },
   {
     name: "JIRA",
@@ -93,7 +93,7 @@ const columns: IColumn[] = [
       type: "url",
     },
     shortable: true,
-    type: "url",
+    type: InputType.URL,
   },
   {
     name: "Nº Factura",
@@ -102,33 +102,34 @@ const columns: IColumn[] = [
       width: "100px",
     },
     shortable: true,
-    type: "string",
+    type: InputType.STRING,
   },
   {
     name: "Vencimiento",
     key: "due",
     attributes: { width: "165px", type: "date" },
     shortable: true,
-    type: "date",
+    type: InputType.DATE,
   },
   {
     name: "Cobrado",
     key: "paid",
     attributes: { width: "100px" },
     shortable: true,
-    type: "boolean",
+    type: InputType.BOOLEAN,
   },
   {
     name: "Descripción",
     key: "description",
     attributes: { width: "300px" },
     shortable: false,
+    type: InputType.STRING,
   },
   {
     name: "Confirmado",
     key: "confirmed",
     attributes: { width: "100px" },
-    type: "boolean",
+    type: InputType.BOOLEAN,
     shortable: true,
   },
   {
@@ -138,6 +139,21 @@ const columns: IColumn[] = [
     shortable: false,
   },
 ];
+
+const emptyRow: Income = {
+  id: "",
+  amount: 0,
+  project: projects[0].name,
+  area: "",
+  jira: "",
+  invoice: "",
+  due: "",
+  paid: false,
+  by: "",
+  lastmodified: "",
+  description: "",
+  confirmed: false,
+};
 
 const MonthlyIncomeComponent: FC<{ month: number; year: number }> = ({
   month,
@@ -198,6 +214,7 @@ const MonthlyIncomeComponent: FC<{ month: number; year: number }> = ({
           columns={columns}
           projects={projects}
           addHandler={(row: Income) => addRow(row)}
+          emptyRow={emptyRow}
         ></RowComponent>
       </Table>
     </React.Fragment>
